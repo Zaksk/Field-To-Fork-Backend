@@ -3,7 +3,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "setup-db": "node db/setup.js",
+    "test": "jest --watchAll --verbose --detectOpenHandles --runInBand",
+    "coverage": "jest --coverage",
+    "clear-cache": "jest --clearCache"
   },
   "keywords": [],
   "author": "",
