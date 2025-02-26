@@ -148,9 +148,15 @@ VALUES
 
 INSERT INTO products (user_id, type_id, variety, description, active, image_url, price) 
 VALUES 
-(1, 8, 'victoria', 'awesome pairs', true, 'image_url_pairs', 3.50),
-(3, 2, 'vine', 'freash vine tomatos', true, 'image_url_tomato', 1.15),
-(2, 38, '13_cm', 'red cyclomen in a pot', true, 'image_url_cyclomen', 1.45)
+(1, 8, 'victoria', 'awesome plums', true, 'image_url_plums', 3.50),
+(3, 26, 'vine', 'freash vine tomatos', true, 'image_url_tomato', 1.15),
+(2, 38, '13_cm', 'red cyclamen in a pot', true, 'image_url_cyclamen', 1.45),
+(1, 1, 'golden_delicious', 'Fresh golden delicious apples', true, 'image_url_golden_delicious', 2.99),
+(2, 2, 'conference', 'Conference pears, ripe and juicy', true, 'image_url_conference_pear', 2.50),
+(3, 3, 'autumn_raspberry', 'Autumn raspberries, sweet and tart', true, 'image_url_autumn_raspberry', 3.20),
+(1, 4, 'sequoia', 'Sequoia strawberries, sweet and juicy', true, 'image_url_sequoia_strawberry', 4.00),
+(2, 12, 'baby_leeks', 'Fresh baby leeks', true, 'image_url_baby_leeks', 2.10),
+(3, 13, 'crunchy_celery', 'Crunchy celery stalks, perfect for salads', true, 'image_url_crunchy_celery', 1.25)
 RETURNING *;
 
 INSERT INTO comments (user_id, product_id, comment_text) 

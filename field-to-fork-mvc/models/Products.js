@@ -140,25 +140,52 @@ class Product {
     return { message: "Comment deleted successfully." };
   }
 
-  // Displaying all comments for the product ordered by the timestamp from oldest to newest
+  // Displaying all comments for the product ordered by the timestamp from newest to oldest
   static async getCommentsById(product_id) {
     if (!product_id) {
       throw new Error("Ensure product_id is provided.");
     }
 
     let response = await db.query(
-      "SELECT com.comment_text, u.name, com.created_at FROM comments as com INNER JOIN users as u ON (u.user_id = com.user_id) WHERE com.product_id = $1 ORDER BY com.created_at ASC",
+      "SELECT com.comment_text, u.name, com.created_at FROM comments as com INNER JOIN users as u ON (u.user_id = com.user_id) WHERE com.product_id = $1 ORDER BY com.created_at DESC",
       [product_id]
     );
 
     return response.rows;
   }
+
+  // Filter all product by the category (fruits, vegetables, plants and flowers)
   static async filterByCategory(category_id) {
     let response = await db.query(
       "SELECT *, c.category_id, c.category_name, pr.price_type_id, pr.price_type_name FROM products as p INNER JOIN types as t ON (p.type_id = t.type_id) INNER JOIN categories as c ON (c.category_id = t.category_id) INNER JOIN price_types as pr ON (pr.price_type_id = t.price_type_id) WHERE c.category_id = $1",
       [category_id]
     );
     return response.rows.length ? response.rows : [];
+  }
+
+  // Searching by a string in the type name, variety and description
+  static async search(str) {
+
+    if (!str) {
+      throw new Error("Search string is required.");
+    }
+
+    const query = `
+    SELECT t.type_name, 
+           p.variety,
+           p.description,
+           p.product_id,
+           p.type_id
+    FROM products as p
+    INNER JOIN types as t ON (t.type_id = p.type_id) 
+    WHERE t.type_name ILIKE $1
+       OR p.variety ILIKE $1
+       OR p.description ILIKE $1
+  `;
+
+    const searchString = `%${str}%`;
+    const response = await db.query(query, [searchString]);
+    return response.rows;
   }
   /* TO DO
   // Filter the products by specifying category, type, location(?!), variety and description.
