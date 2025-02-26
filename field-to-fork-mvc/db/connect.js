@@ -1,4 +1,4 @@
-const { Pool } = require('pg');
+
 
 /*const db = new Pool({
   user: process.env.DB_USER,
@@ -8,16 +8,12 @@ const { Pool } = require('pg');
   port: process.env.DB_PORT || 5432,
 });
 */
-const db = new Pool({
-  connectionString: process.env.DB_URL,
-});
+const { Pool } = require("pg");
 
-db.connect((err) => {
-  if (err) {
-    console.error('Database connection error', err.stack);
-  } else {
-    console.log('Database connected');
-  }
-});
+const db = new Pool({
+    connectionString: process.env.DB_URL
+})
+
+console.log("DB connection established.")
 
 module.exports = db;
