@@ -1,10 +1,11 @@
 const db = require("../db/connect");
 
 class User {
-  constructor({user_id, name, email, postcode, password_hash, created_at,
+  constructor({user_id, name, username, email, postcode, password_hash, created_at,
   }) {
     this.user_id = user_id;
     this.name = name;
+    this.username = username;
     this.email = email;  
     this.postcode = postcode;
     this.password_hash = password_hash;
@@ -32,14 +33,14 @@ class User {
   }
 
   static async create(data) {
-    const { name, email, postcode, password_hash } = data;
+    const { name, username, email, postcode, password_hash } = data;
 
     if (!email || !password_hash) 
     {
       throw new Error("Ensure email and password are both provided");
     }
 
-    let response = await db.query("INSERT INTO users (name, email, postcode, password_hash) VALUES ($1, $2, $3, $4) RETURNING user_id, name, email, postcode, created_at;", [name, email, postcode, password_hash]
+    let response = await db.query("INSERT INTO users (name, username, email, postcode, password_hash) VALUES ($1, $2, $3, $4, $5) RETURNING user_id, name, username, email, postcode, created_at;", [name, username, email, postcode, password_hash]
     );
 
     return new User(response.rows[0]);
