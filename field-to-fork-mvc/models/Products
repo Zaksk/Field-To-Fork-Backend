@@ -72,10 +72,18 @@ async  update(data) {
     }
   }
 
-/* TO DO
   async filterByCategory(category_id) {
-    let responce = await db.query("SELECT * from products WHERE ")
+    let response = await db.query(
+      "SELECT *, c.category_id, c.category_name, pr.price_type_id, pr.price_type_name FROM products as p INNER JOIN types as t ON (p.type_id = t.type_id) INNER JOIN categories as c ON (c.category_id = t.category_id) INNER JOIN price_types as pr ON (pr.price_type_id = t.price_type_id) WHERE c.category_id = $1",
+      [category_id]
+    );
+    if (response.rows.length === 0) {
+        return "No products of this category found."
+    }
+    else {
+        return response.rows
+    }
 
-} */
+    } 
 }
 module.exports = Product;
