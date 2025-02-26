@@ -154,16 +154,28 @@ class Product {
     return response.rows;
   }
 
-  // Filter all product by the category (fruits, vegetables, plants and flowers)
+  // Filter all product by the category (fruits, vegetables, plants and flowers), 
+  // ensure that only active products are returned
   static async filterByCategory(category_id) {
-    let response = await db.query(
-      "SELECT *, c.category_id, c.category_name, pr.price_type_id, pr.price_type_name FROM products as p INNER JOIN types as t ON (p.type_id = t.type_id) INNER JOIN categories as c ON (c.category_id = t.category_id) INNER JOIN price_types as pr ON (pr.price_type_id = t.price_type_id) WHERE c.category_id = $1",
-      [category_id]
-    );
+    const query = `
+    SELECT *, 
+    c.category_id, 
+    c.category_name, 
+    pr.price_type_id, 
+    pr.price_type_name 
+    FROM products as p 
+    INNER JOIN types as t ON (p.type_id = t.type_id) 
+    INNER JOIN categories as c ON (c.category_id = t.category_id) 
+    INNER JOIN price_types as pr ON (pr.price_type_id = t.price_type_id) 
+    WHERE c.category_id = $1
+    AND p.active = true
+    `;
+    let response = await db.query(query, [category_id]);
+
     return response.rows.length ? response.rows : [];
   }
 
-  // Searching by a string in the type name, variety and description
+  // Searching by a string in the type name, variety and description among active products
   static async search(str) {
 
     if (!str) {
@@ -181,11 +193,12 @@ class Product {
     WHERE t.type_name ILIKE $1
        OR p.variety ILIKE $1
        OR p.description ILIKE $1
+    AND p.active = true
   `;
 
     const searchString = `%${str}%`;
     const response = await db.query(query, [searchString]);
-    return response.rows;
+    return response.rows.map((el) => new Product(el));;
   }
   /* TO DO
   // Filter the products by specifying category, type, location(?!), variety and description.
