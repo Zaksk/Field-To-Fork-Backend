@@ -27,7 +27,7 @@ CREATE TABLE price_types (
 CREATE TABLE types (
     type_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     category_id INT,
-    price_type_id DECIMAL(10,2),
+    price_type_id INT,
     type_name VARCHAR(50) NOT NULL,
     FOREIGN KEY (category_id) REFERENCES categories (category_id),
     FOREIGN KEY (price_type_id) REFERENCES price_types (price_type_id)
@@ -35,14 +35,14 @@ CREATE TABLE types (
 
 CREATE TABLE products (
     product_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    user_id INT NOT NULL,
+    user_id INT NOT NULL, 
     type_id INT NOT NULL,
     variety VARCHAR(50),
     description VARCHAR(500),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     active BOOLEAN NOT NULL,
     image_url VARCHAR(200),
-    price INT,
+    price DECIMAL(10,2),
     FOREIGN KEY (user_id) REFERENCES users (user_id),
     FOREIGN KEY (type_id) REFERENCES types (type_id)
 );
