@@ -1,8 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 
-//const userRouter = require('./routes/user')
-//const questionsRouter = require('./routes/products')
+const userRouter = require('./routers/user')
+
 
 const app = express();
 
@@ -16,7 +16,7 @@ app.get("/", (req, res) => {
     })
 })
 
-//app.use("/users", userRouter);
-//app.use("/products", questionsRouter)
+app.use("/users", userRouter);
+
 
 module.exports = app;
