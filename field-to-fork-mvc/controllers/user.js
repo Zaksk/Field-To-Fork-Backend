@@ -27,7 +27,7 @@ async function login(req, res) {
         throw new Error('No user with this username');
       }
 
-      const match = await bcrypt.compare(data.password, user.password);
+      const match = await bcrypt.compare(data.password, user.password_hash);
 
       if (match) {
         const payload = { user_id: user.user_id }; 
