@@ -1,4 +1,4 @@
-const db = require('../db/connect'); // Updated to match your 'db' folder
+const db = require('../db/connect'); 
 
 class User {
     constructor({ user_id, name, username, email, postcode, password, created_at }) {
@@ -8,7 +8,7 @@ class User {
         this.email = email;
         this.postcode = postcode;
         this.password = password;
-        this.created_at = created_at; // Fixed typo from 'crated_at'
+        this.created_at = created_at; 
     }
 
     static async getOneById(id) {
