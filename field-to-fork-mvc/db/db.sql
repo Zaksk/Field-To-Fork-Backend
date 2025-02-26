@@ -124,3 +124,21 @@ INSERT INTO types (category_id, price_type_id, type_name) VALUES
 (4, 3, 'stocks'),
 (4, 3, 'sweet_williams'),
 (4, 3, 'peony');
+
+
+-- Adding some users and products to play around, will be deleted later
+INSERT INTO users (name, username, email, postcode, password_hash) 
+VALUES 
+('Winnie the Pooh', 'Winny', 'email@email.com', 'CB12khg', 'qwerty'),
+('Alice Wonderland', 'Alice', 'alice@email.com', 'W1N 1AA', 'wonderland'),
+('Bob Builder', 'Bob', 'bob@email.com', 'A23 4GH', 'builder123'),
+('Charlie Brown', 'Charlie', 'charlie@email.com', 'P56R 7HH', 'peanuts'),
+('Dora Explorer', 'Dora', 'dora@email.com', 'D9V 4JE', 'explorer2025');
+
+
+INSERT INTO products (user_id, type_id, variety, description, active, image_url, price) 
+VALUES 
+(1, 8, 'victoria', 'awesome pairs', true, 'image_url_pairs', 3.50),
+(3, 2, 'vine', 'freash vine tomatos', true, 'image_url_tomato', 1.15),
+(2, 38, '13_cm', 'red cyclomen in a pot', true, 'image_url_cyclomen', 1.45)
+RETURNING *;
