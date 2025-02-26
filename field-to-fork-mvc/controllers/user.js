@@ -10,12 +10,8 @@ async function register(req, res) {
   
       // Generate a salt with a specific cost
       const salt = await bcrypt.genSalt(parseInt(process.env.BCRYPT_SALT_ROUNDS));
-  
-      // Hash the password
       data.password_hash = await bcrypt.hash(data.password, salt);
       console.log(data.password_hash)
-  
-      // Create a new user and return the user object
       const result = await User.create(data);
       res.status(201).json(result);
     } catch (err) {
@@ -34,7 +30,7 @@ async function login(req, res) {
       const match = await bcrypt.compare(data.password, user.password);
 
       if (match) {
-        const payload = { user_id: user.user_id }; // Changed from login_id to user_id
+        const payload = { user_id: user.user_id }; 
 
         jwt.sign(payload, process.env.SECRET_TOKEN, { expiresIn: 3600 }, (err, token) => {
           if (err) { throw new Error('Error in token generation'); }
