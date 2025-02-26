@@ -38,8 +38,8 @@ class Product {
   static async create(data) {
     const { user_id, type_id, variety, description, active, image_url, price } = data;
 
-    if (type_id === undefined) {
-      throw new Error("Ensure the product type is provided");
+    if (user_id === undefined || type_id === undefined || active === undefined) {
+      throw new Error("Ensure the product type, user_id and active status are provided");
     }
 
     let response = await db.query(
@@ -51,6 +51,39 @@ class Product {
     const newProduct = await Product.getOneById(newId);
     return newProduct;
   }
-}
 
+  static async getAll(user_id) {
+    const id = user_id;
+    const response = await db.query("SELECT * FROM products WHERE user_id = $1 ORDER BY created_at DESC", [id]);
+    if (response.rows.length == 0) {
+        throw new Error("No products found");
+    } else {
+        return response.rows.map((el) => new Product(el));
+    }
+  }
+
+async  update(data) {
+    const {type_id, variety, description, active, image_url, price} = data
+    let response = await db.query("UPDATE products SET type_id = $1, variety = $2, description = $3, active = $4, image_url = $5, price = $6 WHERE product_id = $7 RETURNING *", [type_id, variety, description, active, image_url, price, this.product_id])
+    if (response.rows.length !== 1) {
+      throw Error('Could not update the product!');
+    } else {
+      return response.rows[0];
+    }
+  }
+
+  async filterByCategory(category_id) {
+    let response = await db.query(
+      "SELECT *, c.category_id, c.category_name, pr.price_type_id, pr.price_type_name FROM products as p INNER JOIN types as t ON (p.type_id = t.type_id) INNER JOIN categories as c ON (c.category_id = t.category_id) INNER JOIN price_types as pr ON (pr.price_type_id = t.price_type_id) WHERE c.category_id = $1",
+      [category_id]
+    );
+    if (response.rows.length === 0) {
+        return "No products of this category found."
+    }
+    else {
+        return response.rows
+    }
+
+    } 
+}
 module.exports = Product;
