@@ -48,6 +48,16 @@ CREATE TABLE products (
     FOREIGN KEY (type_id) REFERENCES types (type_id)
 );
 
+CREATE TABLE comments (
+    comment_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    user_id INT NOT NULL,
+    product_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    comment_text VARCHAR(500),
+    FOREIGN KEY (user_id) REFERENCES users (user_id),
+    FOREIGN KEY (product_id) REFERENCES products (product_id)
+);
+
 INSERT INTO price_types (price_type_name)
 VALUES 
 ('kg'),
@@ -126,7 +136,7 @@ INSERT INTO types (category_id, price_type_id, type_name) VALUES
 (4, 3, 'peony');
 
 
--- Adding some users and products to play around, will be deleted later
+-- Adding some users, products and comments to play around, will be deleted later
 INSERT INTO users (name, username, email, postcode, password_hash) 
 VALUES 
 ('Winnie the Pooh', 'Winny', 'email@email.com', 'CB12khg', 'qwerty'),
@@ -142,3 +152,8 @@ VALUES
 (3, 2, 'vine', 'freash vine tomatos', true, 'image_url_tomato', 1.15),
 (2, 38, '13_cm', 'red cyclomen in a pot', true, 'image_url_cyclomen', 1.45)
 RETURNING *;
+
+INSERT INTO comments (user_id, product_id, comment_text) 
+VALUES 
+(2, 1, 'Can I take them tomorrow?'),
+(1, 1, 'Absolutely');
