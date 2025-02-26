@@ -2,7 +2,7 @@ const Product = require('../models/Products');
 
 async function index(req, res) {
     try {
-        let user_id = req.params.id
+        let user_id = req.body.login_id
         const products = await Product.getAll(user_id);
     res.status(200).json(products);
   } catch (err) {
@@ -11,8 +11,9 @@ async function index(req, res) {
 }
 
 async function show(req, res) {
+  console.log(req.params.id)
     try {
-      id = req.params
+      id = req.params.id
       const product = await Product.getOneById(id);
       res.status(200).json(product);
     } catch (err) {
@@ -22,7 +23,7 @@ async function show(req, res) {
 
 async function create(req, res) {
     try{
-        const data = req.params  
+        const data = req.body
         const newProduct = await Product.create(data)
         res.status(201).json(newProduct)
     } catch(err) {
@@ -46,7 +47,7 @@ async function update(req, res) {
   async function destroy(req, res) {
     try {
       const id = req.params.id;
-      const product = await Product.getUserById(id);
+      const product = await Product.getOneById(id);
       const result = await product.destroy();
       res.status(204).end();
     } catch (err) {
@@ -55,8 +56,9 @@ async function update(req, res) {
   }
 
   async function filterByCategory(req, res) {
+    console.log(req.params.category_id, 'category id')
     try {
-        const id = req.params.id;
+        const id = req.params.category_id;
         const category = await Product.filterByCategory(id)
         res.status(200).json(category);
     }
