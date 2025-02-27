@@ -108,38 +108,64 @@ class Product {
     return response.rows[0];
   }
 
-  async deleteComment(data) {
+  // async deleteComment(data) {
+  //   const { user_id, comment_id } = data;
+
+  //   if (!user_id || !comment_id) {
+  //     throw new Error("Ensure user_id and comment_id are provided.");
+  //   }
+
+  //   // Check if the comment exists and if the user_id matches
+  //   const commentCheck = await db.query(
+  //     "SELECT user_id FROM comments WHERE comment_id = $1",
+  //     [comment_id]
+  //   );
+
+  //   if (commentCheck.rows.length === 0) {
+  //     throw new Error("Comment not found.");
+  //   }
+
+  //   if (commentCheck.rows[0].user_id !== user_id) {
+  //     throw new Error("Unauthorised: You can only delete your own comments.");
+  //   }
+
+  //   const response = await db.query(
+  //     "DELETE FROM comments WHERE comment_id = $1 RETURNING *",
+  //     [comment_id]
+  //   );
+
+  //   if (response.rows.length !== 1) {
+  //     throw new Error("Could not delete the comment.");
+  //   }
+
+  //   return { message: "Comment deleted successfully." };
+  // }
+
+  static async deleteComment(data) {
     const { user_id, comment_id } = data;
 
     if (!user_id || !comment_id) {
-      throw new Error("Ensure user_id and comment_id are provided.");
+        throw new Error("Ensure user_id and comment_id are provided.");
     }
-
-    // Check if the comment exists and if the user_id matches
-    const commentCheck = await db.query(
-      "SELECT user_id FROM comments WHERE comment_id = $1",
-      [comment_id]
-    );
-
+    // Check if the comment exists and if the user_id matches const 
+    commentCheck = await db.query(
+        "SELECT user_id FROM comments WHERE comment_id = $1",
+        [comment_id]);
     if (commentCheck.rows.length === 0) {
-      throw new Error("Comment not found.");
+        throw new Error("Comment not found.");
     }
-
     if (commentCheck.rows[0].user_id !== user_id) {
-      throw new Error("Unauthorised: You can only delete your own comments.");
+        throw new Error("Unauthorised: You can only delete your own comments.");
     }
-
     const response = await db.query(
-      "DELETE FROM comments WHERE comment_id = $1 RETURNING *",
-      [comment_id]
+        "DELETE FROM comments WHERE comment_id = $1 RETURNING *",
+        [comment_id]
     );
-
     if (response.rows.length !== 1) {
-      throw new Error("Could not delete the comment.");
+        throw new Error("Could not delete the comment.");
     }
-
     return { message: "Comment deleted successfully." };
-  }
+}
 
   // Displaying all comments for the product ordered by the timestamp from newest to oldest
   static async getCommentsById(product_id) {
@@ -148,7 +174,7 @@ class Product {
     }
 
     let response = await db.query(
-      "SELECT com.comment_text, u.name, com.created_at FROM comments as com INNER JOIN users as u ON (u.user_id = com.user_id) WHERE com.product_id = $1 ORDER BY com.created_at DESC",
+      "SELECT com.comment_text, u.name, u.user_id, com.comment_id, com.created_at FROM comments as com INNER JOIN users as u ON (u.user_id = com.user_id) WHERE com.product_id = $1 ORDER BY com.created_at DESC",
       [product_id]
     );
 

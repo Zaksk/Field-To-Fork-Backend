@@ -14,5 +14,8 @@ productRouter.patch('/:id', authenticator, productController.update);
 productRouter.delete('/:id', authenticator, productController.destroy);
 productRouter.get('/category/:category_id', authenticator, productController.filterByCategory);
 
+// productRouter.get('/comment/:productid', authenticator, productController.getCommentsById);
+// productRouter.post('/comment', authenticator, productController.addComment);
+// productRouter.delete('/comment/:productid/:commentid', authenticator, productController.deleteComment);
 
 module.exports = productRouter
