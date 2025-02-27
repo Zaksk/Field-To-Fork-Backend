@@ -139,11 +139,11 @@ INSERT INTO types (category_id, price_type_id, type_name) VALUES
 -- Adding some users, products and comments to play around, will be deleted later
 INSERT INTO users (name, username, email, postcode, password_hash) 
 VALUES 
-('Winnie the Pooh', 'Winny', 'email@email.com', 'CB12khg', 'qwerty'),
-('Alice Wonderland', 'Alice', 'alice@email.com', 'W1N 1AA', 'wonderland'),
-('Bob Builder', 'Bob', 'bob@email.com', 'A23 4GH', 'builder123'),
-('Charlie Brown', 'Charlie', 'charlie@email.com', 'P56R 7HH', 'peanuts'),
-('Dora Explorer', 'Dora', 'dora@email.com', 'D9V 4JE', 'explorer2025');
+('Winnie the Pooh', 'Winny', 'email@email.com', 'SG8 5HX', 'qwerty'),
+('Alice Wonderland', 'Alice', 'alice@email.com', 'SG8 5RE', 'wonderland'),
+('Bob Builder', 'Bob', 'bob@email.com', 'SG8 5NY', 'builder123'),
+('Charlie Brown', 'Charlie', 'charlie@email.com', 'CB24 6AE', 'peanuts'),
+('Dora Explorer', 'Dora', 'dora@email.com', 'CB23 5DT', 'explorer2025');
 
 
 INSERT INTO products (user_id, type_id, variety, description, active, image_url, price) 
