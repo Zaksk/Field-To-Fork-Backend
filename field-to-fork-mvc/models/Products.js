@@ -147,7 +147,7 @@ class Product {
     }
 
     let response = await db.query(
-      "SELECT com.comment_text, u.name, com.created_at FROM comments as com INNER JOIN users as u ON (u.user_id = com.user_id) WHERE com.product_id = $1 ORDER BY com.created_at DESC",
+      "SELECT com.comment_text, u.name, u.user_id, com.comment_id, com.created_at FROM comments as com INNER JOIN users as u ON (u.user_id = com.user_id) WHERE com.product_id = $1 ORDER BY com.created_at DESC",
       [product_id]
     );
 
