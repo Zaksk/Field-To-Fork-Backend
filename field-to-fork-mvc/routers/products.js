@@ -16,6 +16,6 @@ productRouter.get('/category/:category_id', authenticator, productController.fil
 
 productRouter.get('/comment/:productid', authenticator, productController.getCommentsById);
 productRouter.post('/comment', authenticator, productController.addComment);
-productRouter.delete('/comment/:productid', authenticator, productController.deleteComment);
+productRouter.delete('/comment/:productid/:commentid', authenticator, productController.deleteComment);
 
 module.exports = productRouter
