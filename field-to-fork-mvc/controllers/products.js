@@ -66,96 +66,27 @@ async function update(req, res) {
     }
   }
 
-  async function addComment(req, res) {
-    try{
-        const data = req.body
-        const newComment = await Product.addComment(data)
-        res.status(201).json(newComment)
-    } catch(err) {
-        res.status(400).json({error: err.message})
+  async function search(req, res) {
+    try {
+      const { q } = req.query;
+      // if (!q) {
+      //   return res.status(400).json({ message: 'Search query is required.' });
+      // }
+      const products = await Product.search(q);
+      res.status(200).json(products);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
   }
 
-  // async function deleteComment(req, res) {
-  //   // console.log(req.params, 'sdfhsjdh')
-  //   // console.log(req.body, 'sdfhsjdh')
-  //   try {
-  //     const id = req.params.productid;
-  //     const userid = req.body.user_id
-  //     const comment = await Product.getCommentsById(id);
-  //     console.log(comment)
-  //     const commentid = comment[0].comment_id
-  //     const result = await comment.deleteComment({userid, commentid});
-  //     res.status(204).end();
-  //   } catch (err) {
-  //     res.status(404).json({ error: err.message });
-  //   }
-  // }
-
-//   async function deleteComment(req, res) {
-//     try {
-//         const productId = req.params.productid; // Extract product ID from URL
-//         const userId = req.body.user_id; // Extract user_id from token
-//         // Fetch comments for the given product
-//         const comments = await Product.getCommentsById(productId);
-//         console.log(comments)
-//         if (comments.length === 0) {
-//             return res.status(404).json({ error: "No comments found for this product." });
-//         }
-//         // Find the comment made by the authenticated user
-//         console.log(userId, 'jsskdjkd')
-//         const userComment = comments[0]
-//         console.log(userComment.comment_id, 'userComment')
-//         if (!userComment) {
-//             return res.status(403).json({ error: "Unauthorized: No comment found for this user on this product." });
-//         }
-//         // Delete the comment
-//         await Product.deleteComment({ user_id: userId, comment_id: userComment.comment_id });
-//         res.status(200).json({ message: "Comment deleted successfully." });
-//     } catch (err) {
-//         res.status(500).json({ error: err.message }); 
-//     }
-//  }
-
-async function deleteComment(req, res) {
-  try {
-      const productId = req.params.productid; // Extract product ID from URL
-      const userId = req.body.user_id; // Extract user_id from token
-
-      // Fetch comments for the given product
-      const comments = await Product.getCommentsById(productId);
-      console.log(comments, 'comment');
-              if (comments.length === 0) {
-          return res.status(404).json({ error: "No comments found for this product." });
-      }
-      // Find the comment made by the authenticated user
-      const userComment = comments.filter(comment => comment.user_id === userId);
-      console.log(userComment, "user's comments on the product");
-      // const userComment = comments.find(comment => comment.comment_id === userId); // Find the comment from the user
-      if (!userComment) {
-          return res.status(403).json({ error: "Unauthorized: No comment found for this user on this product." });
-        }
-        res.status(200).json({ message: "Comment deleted successfully." });
-      // Delete the comment
-      await Product.deleteComment({ user_id: userId, comment_id: userComment.comment_id });
+  async function filter(req, res) {
+    try {
+      const { category_id, type_id, str, user_postcode } = req.query;
+      const products = await Product.filter({ category_id, type_id, str, user_postcode });
+      res.status(200).json(products);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
-   catch (err) {
-      res.status(500).json({ error: err.message });
   }
-}
-  
 
-  async function getCommentsById(req, res) {
-      try {
-        id = req.params.productid
-        const comment = await Product.getCommentsById(id);
-        console.log(comment)
-        res.status(200).json(comment);
-      } catch (err) {
-        res.status(404).json({ error: err.message });
-      }
-    }
-
-    async function search(req, res) {}
-
-module.exports = { index, show, create, update, destroy, filterByCategory, addComment, deleteComment, getCommentsById, search };
+module.exports = { index, show, create, update, destroy, filterByCategory, search, filter };

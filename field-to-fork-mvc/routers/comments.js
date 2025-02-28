@@ -6,8 +6,8 @@ const authenticator = require("../middleware/authenticator");
 
 const commentRouter = Router();
 
-commentRouter.get('/:productid', authenticator, commentsController.index);
-commentRouter.post('/', authenticator,commentsController.create);
-commentRouter .delete('/:commentid',authenticator,  commentsController.destroy);
+commentRouter.get('/:productid', commentsController.index);
+commentRouter.post('/', commentsController.create);
+commentRouter .delete('/:commentid', commentsController.destroy);
 
 module.exports = commentRouter;

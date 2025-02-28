@@ -7,12 +7,14 @@ const authenticator = require("../middleware/authenticator");
 const productRouter = Router();
 
 
-productRouter.get('/', authenticator, productController.index);
-productRouter.get('/:id', authenticator, productController.show);
-productRouter.post('/', authenticator, productController.create);
-productRouter.patch('/:id', authenticator, productController.update);
-productRouter.delete('/:id', authenticator, productController.destroy);
-productRouter.get('/category/:category_id', authenticator, productController.filterByCategory);
+productRouter.get('/', productController.index);
+productRouter.get('/:id', productController.show);
+productRouter.post('/', productController.create);
+productRouter.patch('/:id', productController.update);
+productRouter.delete('/:id', productController.destroy);
+productRouter.get('/category/:category_id', productController.filterByCategory);
+productRouter.get('/search', productController.search);
+productRouter.get('/filter', productController.filter);
 
 // productRouter.get('/comment/:productid', authenticator, productController.getCommentsById);
 // productRouter.post('/comment', authenticator, productController.addComment);
