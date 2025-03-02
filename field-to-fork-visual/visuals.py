@@ -22,13 +22,15 @@ app = dash.Dash(suppress_callback_exceptions=False)
 # Layout
 app.layout = html.Div([
 
-    # Main container with two divs: left for selections and right for stats
+    # Single container with inputs for category, item, variety, and graph output
     html.Div([
-        # Left div containing category, item, and variety selectors
+
+        # Upper div containing category, item, and variety selectors
         html.Div([
+
             html.Label("Select Category:",
-                       style={'display': 'block', 
-                              'marginTop': '20px', 
+                       style={'display': 'block',
+                              'marginTop': '20px',
                               'marginBottom': '10px'}),
             dcc.RadioItems(
                 id='category-radio',
@@ -37,17 +39,21 @@ app.layout = html.Div([
                 value=df['category'].unique()[0],
                 inline=True,
                 style={
-                    'display': 'flex',
-                    'justifyContent': 'space-between',
-                    'flexWrap': 'wrap'
+                    'display': 'inline-flex',
+                    'justifyContent': 'flex-start',
+                    'flexWrap': 'wrap',
+                    'gap': '10px',
+                    'fontFamily': '"Roboto", sans-serif'  # Apply font here
                 }
             ),
 
-            html.Label("Select Item:", 
+            html.Label("Select Item:",
                        style={
-                           'display': 'block', 
-                           'marginTop': '20px', 
-                           'marginBottom': '10px'}),
+                           'display': 'block',
+                           'marginTop': '20px',
+                           'marginBottom': '10px',
+                           'fontFamily': '"Roboto", sans-serif'  # Apply font here
+                       }),
             dcc.Dropdown(
                 id='item-dropdown',
                 options=[],  # Populated dynamically
@@ -55,14 +61,17 @@ app.layout = html.Div([
                 placeholder="Select an item",
                 style={
                     'border': '0.5px solid #0A7029',
-                    'borderRadius': '1.5px'
+                    'borderRadius': '1.5px',
+                    'fontFamily': '"Roboto", sans-serif'  # Apply font here
                 }
             ),
 
             html.Label("Select Variety:",
-                       style={'display': 'block', 
-                              'marginTop': '20px', 
-                              'marginBottom': '10px'}),
+                       style={'display': 'block',
+                              'marginTop': '20px',
+                              'marginBottom': '10px',
+                              'fontFamily': '"Roboto", sans-serif'  # Apply font here
+                              }),
             dcc.Dropdown(
                 id='variety-dropdown',
                 options=[],  # Populated dynamically
@@ -70,20 +79,24 @@ app.layout = html.Div([
                 placeholder="Select a variety",
                 style={
                     'border': '0.5px solid #0A7029',
-                    'borderRadius': '1.5px'
+                    'borderRadius': '1.5px',
+                    'fontFamily': '"Roboto", sans-serif'  # Apply font here
                 }
             ),
+
         ], style={
-            'flex': '3',  
             'padding': '20px',
             'backgroundColor': 'rgba(255, 255, 255, 0.8)',
             'borderRadius': '8px',
             'boxShadow': '0px 4px 6px rgba(0, 0, 0, 0.1)',
-            'marginRight': '10px'  # Add some space to separate from the right div
+            'marginBottom': '20px',  # Space between input section and output section
+            'fontFamily': '"Roboto", sans-serif'  # Apply font to this div
         }),
 
-        # Right div containing the price-stats
+        # Bottom div for price-stats and price-scatter
         html.Div([
+
+            # Price stats on top
             html.Div(id='price-stats', style={
                 'backgroundColor': '#0A7029',
                 'color': 'white',
@@ -92,27 +105,27 @@ app.layout = html.Div([
                 'boxShadow': '0px 4px 6px rgba(0, 0, 0, 0.1)',
                 'fontSize': '16px',
                 'display': 'flex',
-                'flexDirection': 'column',  # Stack children vertically
-                'alignItems': 'center',  # Center align items horizontally
-                'height': '100%',  # Ensure it takes up all the height of the container
-                'width': '100%'  # Ensure it takes up all the width of the container
+                'flexDirection': 'column',
+                'alignItems': 'center',
+                'width': '90%',
+                'margin': 'auto',
+                'fontFamily': '"Roboto", sans-serif'  # Apply font here
             }),
-        ], style={
-            'flex': '1',  
-            'display': 'flex',
-            'justifyContent': 'flex-end',  # Align to the right side
-            'padding': '20px',
-            'height': '100%'  # Make sure the height matches the left div
-        })
-    ], style={
-        'display': 'flex',
-        'justifyContent': 'space-between',  # Space between left and right divs
-        'alignItems': 'stretch',  # Stretch items to match height
-        'marginTop': '20px'
-    }),
 
-    # Scatter plot
-    dcc.Graph(id='price-scatter'),
+            # Scatter plot
+            dcc.Graph(id='price-scatter'),
+
+        ], style={
+            'padding': '25px 15px 15px 15px',
+            'boxShadow': '0px -4px 6px rgba(0, 0, 0, 0.1)',
+            'borderRadius': '8px',
+            'fontFamily': '"Roboto", sans-serif'  # Apply font here
+        }),
+
+    ], style={
+        'marginTop': '20px',  # Add space from the top
+        'fontFamily': '"Roboto", sans-serif'  # Apply font to the whole layout
+    }),
 
 ])
 
@@ -173,7 +186,7 @@ def update_scatter_plot_and_stats(selected_category, selected_item, selected_var
     # Sort by date
     filtered_df = filtered_df.sort_values(by='date')
 
-    # Scatter plot with font change
+    # Scatter plot
     fig = px.scatter(
         filtered_df,
         x='date',
@@ -185,10 +198,10 @@ def update_scatter_plot_and_stats(selected_category, selected_item, selected_var
 
     # Set font family globally for the figure
     fig.update_layout(
-        font=dict(family='Helvetica Neue')
+        # Set the font family for the plot
+        font=dict(family='"Roboto", sans-serif')
     )
     fig.update_traces(marker=dict(color='#0A7029'))
-
 
     # Price range and average for the last year
     last_year_df = filtered_df[filtered_df['date'] >
@@ -198,7 +211,7 @@ def update_scatter_plot_and_stats(selected_category, selected_item, selected_var
         min_price = last_year_df['price'].min()
         max_price = last_year_df['price'].max()
         avg_price = last_year_df['price'].mean()
-        stats_range = f"Price Range (Last Year): £{min_price:.2f} - £{max_price:.2f}" 
+        stats_range = f"Price Range (Last Year): £{min_price:.2f} - £{max_price:.2f}"
         stats_average = f"Average: £{avg_price:.2f}"
         stats = [
             html.Div(stats_range, style={'paddingBottom': '10px'}),
