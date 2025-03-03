@@ -90,56 +90,5 @@ async function update(req, res) {
     }
   }
 
-  async function addComment(req, res) {
-    try{
-        const data = req.body
-        const newComment = await Product.addComment(data)
-        res.status(201).json(newComment)
-    } catch(err) {
-        res.status(400).json({error: err.message})
-    }
-  }
-
   
-async function deleteComment(req, res) {
-  try {
-      const productId = req.params.productid; // Extract product ID from URL
-      const userId = req.body.user_id; // Extract user_id from token
-
-      // Fetch comments for the given product
-      const comments = await Product.getCommentsById(productId);
-      console.log(comments, 'comment');
-              if (comments.length === 0) {
-          return res.status(404).json({ error: "No comments found for this product." });
-      }
-      // Find the comment made by the authenticated user
-      const userComment = comments.filter(comment => comment.user_id === userId);
-      console.log(userComment, "user's comments on the product");
-      // const userComment = comments.find(comment => comment.comment_id === userId); // Find the comment from the user
-      if (!userComment) {
-          return res.status(403).json({ error: "Unauthorized: No comment found for this user on this product." });
-        }
-        res.status(200).json({ message: "Comment deleted successfully." });
-      // Delete the comment
-      await Product.deleteComment({ user_id: userId, comment_id: userComment.comment_id });
-    }
-   catch (err) {
-      res.status(500).json({ error: err.message });
-  }
-}
-  
-
-  async function getCommentsById(req, res) {
-      try {
-        id = req.params.productid
-        const comment = await Product.getCommentsById(id);
-        console.log(comment)
-        res.status(200).json(comment);
-      } catch (err) {
-        res.status(404).json({ error: err.message });
-      }
-    }
-
-    async function search(req, res) {}
-
-module.exports = { showAll, index, show, create, update, destroy, filterByCategory, addComment, deleteComment, getCommentsById, search };
+module.exports = { showAll, index, show, create, update, destroy, filterByCategory };
