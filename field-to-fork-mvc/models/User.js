@@ -27,7 +27,7 @@ class User {
     );
 
     if (response.rows.length !== 1) {
-      throw new Error("Unable to locate user.");
+      throw new Error("Unable to locate user by email.");
     }
     return new User(response.rows[0]);
   }

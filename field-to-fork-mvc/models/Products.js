@@ -73,6 +73,9 @@ class Product {
     return response.rows.map((el) => new Product(el));
   }
 
+
+  // Update the product
+  
   async update(data) {
     const { type_id, variety, description, active, image_url, price } = data;
     let response = await db.query(
@@ -87,7 +90,26 @@ class Product {
     return new Product(response.rows[0]);
   }
 
-  // Filter all product by the category (fruits, vegetables, plants and flowers), 
+  
+  // Destroy method to delete a product by id
+
+  async destroy() {
+    // Ensure the product exists before trying to delete it
+    const response = await db.query(
+      "DELETE FROM products WHERE product_id = $1 RETURNING *",
+      [this.product_id] // Use this.product_id as it refers to the current product's ID
+    );
+
+    if (response.rows.length === 0) {
+      throw new Error("Product not found.");
+    }
+
+    return "Product deleted successfully."; 
+  }
+
+  
+
+  // Filter all product by the category (fruits, vegetables, plants and flowers),
   // ensure that only active products are returned
   static async filterByCategory(category_id) {
     const query = `
@@ -110,7 +132,6 @@ class Product {
 
   // Searching by a string in the type name, variety and description among active products
   static async search(str) {
-
     if (!str) {
       throw new Error("Search string is required.");
     }
@@ -131,14 +152,14 @@ class Product {
 
     const searchString = `%${str}%`;
     const response = await db.query(query, [searchString]);
-    return response.rows.map((el) => new Product(el));;
+    return response.rows.map((el) => new Product(el));
   }
-  
+
   // Filter the products by specifying category, type, search string in type, variety, descrption.
-  
+
   static async filter(data) {
-    const {category_id, type_id, str, user_postcode} = data
-    
+    const { category_id, type_id, str, user_postcode } = data;
+
     // Defining the basic select without any filter parameters
     let query = `
     SELECT p.*,
@@ -154,59 +175,60 @@ class Product {
       INNER JOIN users AS u ON (u.user_id = p.user_id)
     WHERE p.active = true
     `;
-    
-  let params = [] // to store all search parameters here
-  let index = 1   // to assign index to each parameter added and use it in the query
 
-  // Adding the category filter if the user specifies it in the search
-  if (category_id) {
-    query += ` AND c.category_id = $${index}`
-    params.push(category_id);
-    index ++;
+    let params = []; // to store all search parameters here
+    let index = 1; // to assign index to each parameter added and use it in the query
+
+    // Adding the category filter if the user specifies it in the search
+    if (category_id) {
+      query += ` AND c.category_id = $${index}`;
+      params.push(category_id);
+      index++;
     }
 
-  // Adding type filter if the user specifies it in the search
-  if (type_id) {
-    query += ` AND t.type_id = $${index}`
-    params.push(type_id);
-    index ++;
+    // Adding type filter if the user specifies it in the search
+    if (type_id) {
+      query += ` AND t.type_id = $${index}`;
+      params.push(type_id);
+      index++;
     }
 
-  // Adding the search string to the query if the user specifies it
-  if (str) {
-    const searchString = `%${str}%`
-    query += ` AND (t.type_name ILIKE $${index} OR p.variety ILIKE $${index + 1} OR p.description ILIKE $${index + 2})`;
-    params.push(searchString, searchString, searchString);
-    index += 3;
+    // Adding the search string to the query if the user specifies it
+    if (str) {
+      const searchString = `%${str}%`;
+      query += ` AND (t.type_name ILIKE $${index} OR p.variety ILIKE $${
+        index + 1
+      } OR p.description ILIKE $${index + 2})`;
+      params.push(searchString, searchString, searchString);
+      index += 3;
     }
-  
-  const response = await db.query(query, params)
 
-  const productsAndLocations = [];
-  for (const row of response.rows) {
-    
-    let distanceMiles = null;
+    const response = await db.query(query, params);
 
-    // If user_postcode is provided, calculate the distance between user and product
-    if (user_postcode) {
-      // Check if the postcode is valid
-      try {
-        distanceMiles = await getDistance(user_postcode, row.postcode);
-      } catch (error) {
-        console.error(
-          `Error calculating distance for product ${row.product_id}: ${error.message}`
-        );
+    const productsAndLocations = [];
+    for (const row of response.rows) {
+      let distanceMiles = null;
+
+      // If user_postcode is provided, calculate the distance between user and product
+      if (user_postcode) {
+        // Check if the postcode is valid
+        try {
+          distanceMiles = await getDistance(user_postcode, row.postcode);
+        } catch (error) {
+          console.error(
+            `Error calculating distance for product ${row.product_id}: ${error.message}`
+          );
+        }
       }
+
+      productsAndLocations.push({
+        product: new Product(row), // creating a new product for each search result
+        postcode: row.postcode, // store the product's postcode so you can display on the frontend
+        distance: distanceMiles, // The distance is either null or a valid number
+      });
     }
 
-    productsAndLocations.push({
-      product: new Product(row), // creating a new product for each search result
-      postcode: row.postcode, // store the product's postcode so you can display on the frontend
-      distance: distanceMiles, // The distance is either null or a valid number
-    });
-  }
-
-  return productsAndLocations;
+    return productsAndLocations;
   }
 }
 module.exports = Product;

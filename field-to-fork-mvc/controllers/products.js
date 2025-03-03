@@ -35,7 +35,13 @@ async function update(req, res) {
     try {
         const id = req.params.id;
         const data = req.body
+        const user_id = req.body.login_id;
         const product = await Product.getOneById(id)
+        if (product.user_id !== user_id) {
+          return res.status(403).json({
+            error: "Unauthorized: You can only update your own product.",
+          });
+        }
         const result = await product.update(data)
         res.status(200).json(result);
     }
@@ -47,9 +53,17 @@ async function update(req, res) {
   async function destroy(req, res) {
     try {
       const id = req.params.id;
+      const user_id = req.body.login_id;
       const product = await Product.getOneById(id);
+      if (product.user_id !== user_id) {
+        return res
+          .status(403)
+          .json({
+            error: "Unauthorized: You can only delete your own product.",
+          });
+      }
       const result = await product.destroy();
-      res.status(204).end();
+      res.status(200).json({ message: result });
     } catch (err) {
       res.status(404).json({ error: err.message });
     }
