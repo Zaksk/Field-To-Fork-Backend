@@ -1,5 +1,15 @@
 const Product = require('../models/Products');
 
+async function showAll(req, res) {
+  try {
+    const products = await Product.getAll()
+    res.status(200).json(products);
+  }
+  catch (err) {
+    res.status(404).json({error: err.message})
+  }
+}
+
 async function index(req, res) {
     try {
       let user_id = req.body.login_id
@@ -84,4 +94,4 @@ async function update(req, res) {
 
     async function search(req, res) {}
 
-module.exports = { index, show, create, update, destroy, filterByCategory, search };
+module.exports = { showAll, index, show, create, update, destroy, filterByCategory, addComment, deleteComment, getCommentsById, search };

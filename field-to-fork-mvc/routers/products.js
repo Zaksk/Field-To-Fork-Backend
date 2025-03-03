@@ -7,7 +7,8 @@ const authenticator = require("../middleware/authenticator");
 const productRouter = Router();
 
 
-productRouter.get('/', authenticator, productController.index);
+//productRouter.get('/', authenticator, productController.index);
+productRouter.get('/', authenticator, productController.showAll) // To display all active products
 productRouter.get('/:id', authenticator, productController.show);
 productRouter.post('/', authenticator, productController.create);
 productRouter.patch('/:id', authenticator, productController.update);

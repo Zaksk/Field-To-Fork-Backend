@@ -24,11 +24,35 @@ class Product {
     this.price = price;
   }
 
-  // To display on the product card all product details including:
-  //  - everything from the products table
-  //  - price type and price type id
-  // - category name and category id from the categories table
-  // - type name and type id
+  // Method to get all active products
+  
+  static async getAll() {
+    let query = `
+    SELECT p.*,
+      c.category_id, c.category_name,
+      t.type_id, t.type_name,
+      pr.price_type_id, pr.price_type_name,
+      u.postcode
+    FROM 
+      products as p
+      INNER JOIN types AS t ON (t.type_id = p.type_id)
+      INNER JOIN categories AS c ON (c.category_id = t.category_id)
+      INNER JOIN price_types AS pr ON (pr.price_type_id = t.price_type_id)
+      INNER JOIN users AS u ON (u.user_id = p.user_id)
+    WHERE p.active = true
+    ORDER BY p.created_at DESC
+    `;
+    const response = await db.query(query);
+    if (response.rows.length === 0) {
+      throw new Error('Products not found.')
+    }
+    return response.rows.map((el) => new Product(el));
+  }
+
+
+  
+  // Method to display the product by it's id:
+
   static async getOneById(id) {
     const response = await db.query(
       "SELECT *, c.category_id, c.category_name, pr.price_type_id, pr.price_type_name FROM products as p INNER JOIN types as t ON (p.type_id = t.type_id) INNER JOIN categories as c ON (c.category_id = t.category_id) INNER JOIN price_types as pr ON (pr.price_type_id = t.price_type_id) WHERE p.product_id = $1",
@@ -40,6 +64,9 @@ class Product {
     }
     return new Product(response.rows[0]);
   }
+
+  
+  // Method to create a product 
 
   static async create(data) {
     const { user_id, type_id, variety, description, active, image_url, price } =
@@ -74,7 +101,7 @@ class Product {
   }
 
 
-  // Update the product
+  // Method to update the product
   
   async update(data) {
     const { type_id, variety, description, active, image_url, price } = data;
