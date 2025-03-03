@@ -51,11 +51,8 @@ class Product {
 
 
   
-  // To display on the product card all product details including:
-  //  - everything from the products table
-  //  - price type and price type id
-  // - category name and category id from the categories table
-  // - type name and type id
+  // Method to display the product by it's id:
+
   static async getOneById(id) {
     const response = await db.query(
       "SELECT *, c.category_id, c.category_name, pr.price_type_id, pr.price_type_name FROM products as p INNER JOIN types as t ON (p.type_id = t.type_id) INNER JOIN categories as c ON (c.category_id = t.category_id) INNER JOIN price_types as pr ON (pr.price_type_id = t.price_type_id) WHERE p.product_id = $1",
