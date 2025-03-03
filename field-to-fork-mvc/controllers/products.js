@@ -91,7 +91,4 @@ async function update(req, res) {
   }
 
   
-
-    async function search(req, res) {}
-
-module.exports = { showAll, index, show, create, update, destroy, filterByCategory, addComment, deleteComment, getCommentsById, search };
+module.exports = { showAll, index, show, create, update, destroy, filterByCategory };
