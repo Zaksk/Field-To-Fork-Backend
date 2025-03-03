@@ -46,7 +46,13 @@ class Product {
     if (response.rows.length === 0) {
       throw new Error('Products not found.')
     }
-    return response.rows.map((el) => new Product(el));
+    return response.rows.map((el) => {
+      return {
+        product: new Product(el),
+        category: el.category_name,
+        type: el.type_name
+        }
+      })
   }
 
 
