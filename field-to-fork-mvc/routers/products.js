@@ -14,5 +14,7 @@ productRouter.post('/', authenticator, productController.create);
 productRouter.patch('/:id', authenticator, productController.update);
 productRouter.delete('/:id', authenticator, productController.destroy);
 productRouter.get('/category/:category_id', authenticator, productController.filterByCategory);
+productRouter.get("/type/:category_id", authenticator, productController.getTypesByCategory);
+
 
 module.exports = productRouter

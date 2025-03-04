@@ -58,7 +58,7 @@ async function getDistance(targetPostcode, productPostcode) {
 // Example usage
 
 async function exampleUsage() {
-  const testDistance = await getDistance("SG8 0QJ", "CB23 5FX");
+  const testDistance = await getDistance("SG8 5HX", "CB23 5FX");
   console.log(`The distance is: ${testDistance} miles`);
 }
 exampleUsage();

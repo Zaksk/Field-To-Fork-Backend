@@ -90,5 +90,24 @@ async function update(req, res) {
     }
   }
 
+  async function getTypesByCategory(req, res) {
+    try {
+      const id = req.params.category_id;
+      const category = await Product.getTypesByCategory(id);
+      res.status(200).json(category);
+    } catch (err) {
+      res.status(404).json({ error: err.message });
+    }
+  }
+
   
-module.exports = { showAll, index, show, create, update, destroy, filterByCategory };
+module.exports = {
+  showAll,
+  index,
+  show,
+  create,
+  update,
+  destroy,
+  filterByCategory,
+  getTypesByCategory,
+};

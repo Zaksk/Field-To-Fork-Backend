@@ -190,80 +190,24 @@ class Product {
     return response.rows.map((el) => new Product(el));
   }
 
-  // Filter the products by specifying category, type, search string in type, variety, descrption.
+  // Get types gy category
 
-  static async filter(data) {
-    const { category_id, type_id, str, user_postcode } = data;
-
-    // Defining the basic select without any filter parameters
-    let query = `
-    SELECT p.*,
-      c.category_id, c.category_name,
-      t.type_id, t.type_name,
-      pr.price_type_id, pr.price_type_name,
-      u.postcode
-    FROM 
-      products as p
-      INNER JOIN types AS t ON (t.type_id = p.type_id)
-      INNER JOIN categories AS c ON (c.category_id = t.category_id)
-      INNER JOIN price_types AS pr ON (pr.price_type_id = t.price_type_id)
-      INNER JOIN users AS u ON (u.user_id = p.user_id)
-    WHERE p.active = true
+  static async getTypesByCategory(id) {
+    const query = `
+    SELECT 
+    t.type_id,
+    t.type_name,
+    t.price_type_id,
+    pr.price_type_name FROM types AS t
+    INNER JOIN categories AS c ON (c.category_id = t.category_id)
+    INNER JOIN price_types AS pr ON (pr.price_type_id = t.price_type_id)
+    WHERE c.category_id = $1
     `;
-
-    let params = []; // to store all search parameters here
-    let index = 1; // to assign index to each parameter added and use it in the query
-
-    // Adding the category filter if the user specifies it in the search
-    if (category_id) {
-      query += ` AND c.category_id = $${index}`;
-      params.push(category_id);
-      index++;
-    }
-
-    // Adding type filter if the user specifies it in the search
-    if (type_id) {
-      query += ` AND t.type_id = $${index}`;
-      params.push(type_id);
-      index++;
-    }
-
-    // Adding the search string to the query if the user specifies it
-    if (str) {
-      const searchString = `%${str}%`;
-      query += ` AND (t.type_name ILIKE $${index} OR p.variety ILIKE $${
-        index + 1
-      } OR p.description ILIKE $${index + 2})`;
-      params.push(searchString, searchString, searchString);
-      index += 3;
-    }
-
-    const response = await db.query(query, params);
-
-    const productsAndLocations = [];
-    for (const row of response.rows) {
-      let distanceMiles = null;
-
-      // If user_postcode is provided, calculate the distance between user and product
-      if (user_postcode) {
-        // Check if the postcode is valid
-        try {
-          distanceMiles = await getDistance(user_postcode, row.postcode);
-        } catch (error) {
-          console.error(
-            `Error calculating distance for product ${row.product_id}: ${error.message}`
-          );
-        }
-      }
-
-      productsAndLocations.push({
-        product: new Product(row), // creating a new product for each search result
-        postcode: row.postcode, // store the product's postcode so you can display on the frontend
-        distance: distanceMiles, // The distance is either null or a valid number
-      });
-    }
-
-    return productsAndLocations;
-  }
+    
+    const response = await db.query(query, [id]);
+    return response.rows
+  } 
 }
+
+
 module.exports = Product;
