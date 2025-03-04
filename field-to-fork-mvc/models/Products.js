@@ -86,7 +86,7 @@ class Product {
       active === undefined
     ) {
       throw new Error(
-        "Ensure the product type, user_id and active status are provided"
+        `Ensure the product type, user_id and active status are provided: UID=${user_id}, TID=${type_id}, A=${active}`
       );
     }
 
