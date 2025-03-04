@@ -19,8 +19,20 @@ class Comment {
 
 
     static async getAllByProductId(product_id) {
-        const response = await db.query("SELECT * FROM comments WHERE product_id = $1 ORDER BY created_at DESC", [product_id]);
-        return response.rows.map((el) => new Comment(el));
+        const query = `
+        SELECT c.comment_id, c.user_id, u.username, c.product_id, c.created_at, c.comment_text 
+         FROM comments c
+         JOIN users u ON c.user_id = u.user_id
+         WHERE c.product_id = $1 
+         ORDER BY c.created_at DESC
+        `;
+        const response = await db.query(query, [product_id]);
+        return response.rows.map((el) => {
+          return {
+            comment: new Comment(el),
+            user_name: el.username,
+          };
+        });
     }
 
     static async create(data) {
