@@ -33,7 +33,8 @@ async function show(req, res) {
 
 async function create(req, res) {
     try{
-        const data = req.body
+        let data = req.body
+        data.user_id = req.body.login_id;
         const newProduct = await Product.create(data)
         res.status(201).json(newProduct)
     } catch(err) {
