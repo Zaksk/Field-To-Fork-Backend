@@ -1,9 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 
-const userRouter = require('./routers/user')
+const userRouter = require('./routers/user');
 const productRouter = require('./routers/products');
-const commentRouter = require('./routers/comments')
+const commentRouter = require('./routers/comments');
+const s3Router = require('./routers/s3Routes'); 
 
 const app = express();
 
@@ -14,11 +15,12 @@ app.get("/", (req, res) => {
     res.json({
         name: "Field To Fork",
         description: "A platform dedicated to supporting local sustainability efforts by reducing food waste and providing affordable, fresh produce to the community."
-    })
-})
+    });
+});
 
 app.use("/users", userRouter);
-app.use("/products", productRouter)
-app.use("/users/comments",commentRouter)
+app.use("/products", productRouter);
+app.use("/users/comments", commentRouter);
+app.use("/s3", s3Router); 
 
 module.exports = app;
