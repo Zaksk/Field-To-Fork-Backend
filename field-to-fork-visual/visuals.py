@@ -225,4 +225,4 @@ def update_scatter_plot_and_stats(selected_category, selected_item, selected_var
 
 # Run the app
 if __name__ == '__main__':
-    app.run_server(host='localhost', port=3500)
+    app.run_server(host='0.0.0.0', port=5000)

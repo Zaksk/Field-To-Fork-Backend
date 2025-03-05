@@ -1,13 +1,14 @@
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS categories;
-DROP TABLE IF EXISTS price_types;
-DROP TABLE IF EXISTS types;
-DROP TABLE IF EXISTS products;
-DROP TABLE IF EXISTS comments;
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS categories CASCADE;
+DROP TABLE IF EXISTS price_types CASCADE;
+DROP TABLE IF EXISTS types CASCADE;
+DROP TABLE IF EXISTS products CASCADE;
+DROP TABLE IF EXISTS comments CASCADE;
 
 CREATE TABLE users (
     user_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
+    username VARCHAR(50) NOT NULL,
     email VARCHAR(50) NOT NULL,
     postcode VARCHAR(50) NOT NULL,
     password_hash VARCHAR(200),
@@ -47,6 +48,16 @@ CREATE TABLE products (
     FOREIGN KEY (type_id) REFERENCES types (type_id)
 );
 
+CREATE TABLE comments (
+    comment_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    user_id INT NOT NULL,
+    product_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    comment_text VARCHAR(500),
+    FOREIGN KEY (user_id) REFERENCES users (user_id),
+    FOREIGN KEY (product_id) REFERENCES products (product_id)
+);
+
 INSERT INTO price_types (price_type_name)
 VALUES 
 ('kg'),
@@ -63,3 +74,92 @@ VALUES
 ('cut flowers'),
 ('other');
 
+-- Adding fruits
+INSERT INTO types (category_id, price_type_id, type_name) VALUES
+(1, 1, 'apples'),
+(1, 1, 'pears'),
+(1, 1, 'raspberries'),
+(1, 1, 'strawberries'),
+(1, 1, 'blackberries'),
+(1, 1, 'currants'),
+(1, 1, 'blueberries'),
+(1, 1, 'plums'),
+(1, 1, 'cherries'),
+(1, 1, 'gooseberries');
+
+-- Adding vegetables
+INSERT INTO types (category_id, price_type_id, type_name) VALUES
+(2, 1, 'spring_greens'),
+(2, 1, 'carrots'),
+(2, 2, 'cauliflower'),
+(2, 1, 'celeriac'),
+(2, 1, 'cucumbers'),
+(2, 1, 'leeks'),
+(2, 2, 'lettuce'),
+(2, 1, 'onion'),
+(2, 1, 'swede'),
+(2, 1, 'turnip'),
+(2, 1, 'parsnips'),
+(2, 1, 'rhubarb'),
+(2, 1, 'capsicum'),
+(2, 1, 'chinese_leaf'),
+(2, 1, 'celery'),
+(2, 1, 'tomatoes'),
+(2, 1, 'coriander'),
+(2, 1, 'spinach_leaf'),
+(2, 1, 'calabrese'),
+(2, 1, 'rocket'),
+(2, 1, 'mixed_babyleaf_salad'),
+(2, 2, 'sweetcorn'),
+(2, 1, 'beans'),
+(2, 1, 'courgettes'),
+(2, 1, 'peas'),
+(2, 1, 'asparagus'),
+(2, 1, 'watercress');
+
+-- Adding the pot plants 
+INSERT INTO types (category_id, price_type_id, type_name) VALUES
+(3, 5, 'cyclamen'),
+(3, 5, 'poinsettia'),
+(3, 5, 'geranium');
+
+-- Adding the cut flowers
+INSERT INTO types (category_id, price_type_id, type_name) VALUES
+(4, 3, 'tulips'),
+(4, 3, 'gladioli'),
+(4, 3, 'alstromeria'),
+(4, 3, 'lillies'),
+(4, 3, 'narcissus'),
+(4, 3, 'chrysanthemum'),
+(4, 3, 'stocks'),
+(4, 3, 'sweet_williams'),
+(4, 3, 'peony');
+
+
+-- Adding some users, products and comments to play around, will be deleted later
+INSERT INTO users (name, username, email, postcode, password_hash) 
+VALUES 
+('Winnie the Pooh', 'Winny', 'email@email.com', 'SG8 5HX', 'qwerty'),
+('Alice Wonderland', 'Alice', 'alice@email.com', 'SG8 5RE', 'wonderland'),
+('Bob Builder', 'Bob', 'bob@email.com', 'SG8 5NY', 'builder123'),
+('Charlie Brown', 'Charlie', 'charlie@email.com', 'CB24 6AE', 'peanuts'),
+('Dora Explorer', 'Dora', 'dora@email.com', 'CB23 5DT', 'explorer2025');
+
+
+INSERT INTO products (user_id, type_id, variety, description, active, image_url, price) 
+VALUES 
+(1, 8, 'victoria', 'awesome plums', true, 'https://images.unsplash.com/photo-1569852118044-f57df8b4f0cf?q=80&w=2880&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 3.50),
+(3, 26, 'vine', 'freash vine tomatos', true, 'https://images.unsplash.com/photo-1513791053024-3b50799fdd7b?q=80&w=3132&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 1.15),
+(2, 38, '13 cm', 'red cyclamen in a pot', true, 'https://images.unsplash.com/photo-1610816659999-611b2722d524?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 1.45),
+(1, 1, 'golden delicious', 'Fresh golden delicious apples', true, 'https://images.unsplash.com/photo-1603086175742-bc683b0d2716?q=80&w=3174&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 2.99),
+(2, 2, 'conference', 'Conference pears, ripe and juicy', true, 'https://plus.unsplash.com/premium_photo-1724697322743-60f00eccf63b?q=80&w=3088&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 2.50),
+(3, 3, 'autumn_raspberry', 'Autumn raspberries, sweet and tart', true, 'https://images.unsplash.com/photo-1626597825713-2cf6ad237229?q=80&w=3000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 3.20),
+(1, 4, 'sequoia', 'Sequoia strawberries, sweet and juicy', true, 'https://images.unsplash.com/photo-1588165171080-c89acfa5ee83?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 4.00),
+(2, 12, 'Rainbow carrots', 'Tri-Colored carrots perfect for roasting.', true, 'https://images.unsplash.com/photo-1550411294-b3b1bd5fce1b?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 2.10),
+(3, 14, 'crunchy celery', 'Crunchy celery stalks, perfect for salads', true, 'https://plus.unsplash.com/premium_photo-1723485646947-c73bf14ccdb7?q=80&w=3088&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 1.25)
+RETURNING *;
+
+INSERT INTO comments (user_id, product_id, comment_text) 
+VALUES 
+(2, 1, 'Can I take them tomorrow?'),
+(1, 1, 'Absolutely');
