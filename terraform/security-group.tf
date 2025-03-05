@@ -6,15 +6,6 @@ resource "aws_security_group" "field_sg" {
   }
 }
 
-resource "aws_security_group_rule" "http_ingress" {
-  type              = "ingress"
-  from_port         = 80
-  to_port           = 80
-  protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = aws_security_group.field_sg.id
-}
-
 resource "aws_security_group_rule" "ssh_ingres" {
     type = "ingress"
     from_port = 22
@@ -26,8 +17,8 @@ resource "aws_security_group_rule" "ssh_ingres" {
 
 resource "aws_security_group_rule" "app_port_1_ingress" {
   type              = "ingress"
-  from_port         = 3000
-  to_port           = 3000
+  from_port         = 666
+  to_port           = 666
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.field_sg.id
@@ -35,8 +26,8 @@ resource "aws_security_group_rule" "app_port_1_ingress" {
 
 resource "aws_security_group_rule" "app_port_2_ingress" {
   type              = "ingress"
-  from_port         = 5000
-  to_port           = 5000
+  from_port         = 667
+  to_port           = 667
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.field_sg.id

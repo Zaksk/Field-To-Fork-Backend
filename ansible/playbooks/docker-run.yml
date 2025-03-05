@@ -1,8 +1,8 @@
 - hosts: all
   become: true
   tasks:
-    - name: Create the directory containing docker-compose.yml
-      shell: mkdir field-docker
+    - name: Create directory structure
+      shell: mkdir -p field-docker/ssl field-docker/nginx
       args:
         chdir: /home/ec2-user
 
@@ -13,6 +13,30 @@
         owner: ec2-user
         group: ec2-user
         mode: '0644'
+
+    - name: Upload nginx config to the server
+      copy:
+        src: ../../nginx/default.conf
+        dest: /home/ec2-user/field-docker/nginx/default.conf
+        owner: ec2-user
+        group: ec2-user
+        mode: '0644'
+
+    - name: Upload certificates to the server
+      synchronize:
+        src: "../../ssl/"
+        dest: "/home/ec2-user/field-docker/ssl"
+        recursive: yes
+        rsync_opts:
+          - "--chown=ec2-user:ec2-user"
+
+    - name: Ensure correct permissions for ssl files
+      file:
+        path: "/home/ec2-user/field-docker/ssl"
+        owner: ec2-user
+        group: ec2-user
+        mode: '0644'
+        recurse: yes
 
     - name: Run docker-compose 
       shell: docker-compose up -d
