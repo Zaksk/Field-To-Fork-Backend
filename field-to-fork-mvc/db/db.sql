@@ -150,13 +150,13 @@ INSERT INTO products (user_id, type_id, variety, description, active, image_url,
 VALUES 
 (1, 8, 'victoria', 'awesome plums', true, 'https://images.unsplash.com/photo-1569852118044-f57df8b4f0cf?q=80&w=2880&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 3.50),
 (3, 26, 'vine', 'freash vine tomatos', true, 'https://images.unsplash.com/photo-1513791053024-3b50799fdd7b?q=80&w=3132&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 1.15),
-(2, 38, '13_cm', 'red cyclamen in a pot', true, 'https://images.unsplash.com/photo-1610816659999-611b2722d524?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 1.45),
-(1, 1, 'golden_delicious', 'Fresh golden delicious apples', true, 'https://images.unsplash.com/photo-1603086175742-bc683b0d2716?q=80&w=3174&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 2.99),
+(2, 38, '13 cm', 'red cyclamen in a pot', true, 'https://images.unsplash.com/photo-1610816659999-611b2722d524?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 1.45),
+(1, 1, 'golden delicious', 'Fresh golden delicious apples', true, 'https://images.unsplash.com/photo-1603086175742-bc683b0d2716?q=80&w=3174&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 2.99),
 (2, 2, 'conference', 'Conference pears, ripe and juicy', true, 'https://plus.unsplash.com/premium_photo-1724697322743-60f00eccf63b?q=80&w=3088&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 2.50),
 (3, 3, 'autumn_raspberry', 'Autumn raspberries, sweet and tart', true, 'https://images.unsplash.com/photo-1626597825713-2cf6ad237229?q=80&w=3000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 3.20),
 (1, 4, 'sequoia', 'Sequoia strawberries, sweet and juicy', true, 'https://images.unsplash.com/photo-1588165171080-c89acfa5ee83?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 4.00),
-(2, 12, 'baby_leeks', 'Fresh baby leeks', true, 'https://plus.unsplash.com/premium_photo-1678382203744-058782818d27?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 2.10),
-(3, 13, 'crunchy_celery', 'Crunchy celery stalks, perfect for salads', true, 'https://plus.unsplash.com/premium_photo-1723485646947-c73bf14ccdb7?q=80&w=3088&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 1.25)
+(2, 12, 'Rainbow carrots', 'Tri-Colored carrots perfect for roasting.', true, 'https://images.unsplash.com/photo-1550411294-b3b1bd5fce1b?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 2.10),
+(3, 14, 'crunchy celery', 'Crunchy celery stalks, perfect for salads', true, 'https://plus.unsplash.com/premium_photo-1723485646947-c73bf14ccdb7?q=80&w=3088&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 1.25)
 RETURNING *;
 
 INSERT INTO comments (user_id, product_id, comment_text) 
