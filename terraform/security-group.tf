@@ -24,10 +24,19 @@ resource "aws_security_group_rule" "ssh_ingres" {
     security_group_id = aws_security_group.field_sg.id
 }
 
-resource "aws_security_group_rule" "app_port_ingress" {
+resource "aws_security_group_rule" "app_port_1_ingress" {
   type              = "ingress"
   from_port         = 3000
   to_port           = 3000
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.field_sg.id
+}
+
+resource "aws_security_group_rule" "app_port_2_ingress" {
+  type              = "ingress"
+  from_port         = 5000
+  to_port           = 5000
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.field_sg.id

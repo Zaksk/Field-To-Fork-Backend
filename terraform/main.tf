@@ -13,7 +13,7 @@ provider "aws" {
 
 resource "aws_instance" "http_server" {
   ami = "ami-00710ab5544b60cf7"
-  key_name = "default-ec2"
+  key_name = "eu-west"
   instance_type = "t2.micro"
   vpc_security_group_ids = [aws_security_group.field_sg.id]
   subnet_id = data.aws_subnets.default_subnets.ids[0]
@@ -26,5 +26,5 @@ resource "aws_instance" "http_server" {
 }
 
 variable "aws_key_pair" {
-    default = "~/aws/aws_keys/default-ec2.pem"  
+    default = "~/aws/aws_keys/eu-west.pem"  
 }
