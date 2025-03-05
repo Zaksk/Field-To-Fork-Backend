@@ -7,9 +7,9 @@ ENV PORT=3000
 # The default value of a user when creating a postgreSQL DB
 ENV DB_USER=postgres
 # The value of the service name which is used in the 'docker-compose.yml' file
-ENV DB_HOST=food-db
+ENV DB_HOST=field-to-fork-db
 # The name of the database we assigned in the microservice
-ENV DB_NAME=food
+ENV DB_NAME=field-db
 # The value of the password we assigned in the microservice
 ENV DB_PASSWORD=docker
 # The default port when creating a postgreSQL DB
