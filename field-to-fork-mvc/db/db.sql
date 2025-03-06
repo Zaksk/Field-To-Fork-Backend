@@ -39,7 +39,7 @@ CREATE TABLE products (
     user_id INT NOT NULL, 
     type_id INT NOT NULL,
     variety VARCHAR(50),
-    description VARCHAR(500),
+    description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     active BOOLEAN NOT NULL,
     image_url VARCHAR(200),
@@ -53,7 +53,7 @@ CREATE TABLE comments (
     user_id INT NOT NULL,
     product_id INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    comment_text VARCHAR(500),
+    comment_text TEXT,
     FOREIGN KEY (user_id) REFERENCES users (user_id),
     FOREIGN KEY (product_id) REFERENCES products (product_id)
 );
