@@ -23,6 +23,7 @@ s3Router.get("/get-presigned-url", async (req, res) => {
             Key: `uploads/${Date.now()}-${fileName}`,
             Expires: 60,
             ContentType: fileType,
+            ACL: "public-read",
         };
 
         const signedUrl = await s3.getSignedUrlPromise("putObject", params);
